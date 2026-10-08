@@ -6,6 +6,10 @@
 #   (Exception to the bridge-only rule: this host's firewall rejects TCP from
 #   bridge containers to the host itself, so the extra_hosts/host-gateway
 #   trick cannot work here.)
+# - INTERNAL_HOST_ALLOWLIST=rsshub:1200 : FreshRSS has built-in SSRF protection
+#   that refuses to fetch URLs resolving to private IPs ("URL is not allowed to
+#   be resolved"). This allowlist permits exactly rsshub:1200; everything else
+#   stays protected.
 services:
   freshrss:
     image: freshrss/freshrss:latest
@@ -17,6 +21,7 @@ services:
       - freshrss-data:/var/www/FreshRSS/data
     environment:
       TZ: "Asia/Shanghai"
+      INTERNAL_HOST_ALLOWLIST: "rsshub:1200"
     networks:
       - rsshub-net
 
