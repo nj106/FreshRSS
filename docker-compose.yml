@@ -14,6 +14,8 @@ services:
   freshrss:
     image: freshrss/freshrss:latest
     container_name: freshrss
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
     ports:
       - "8081:80"
