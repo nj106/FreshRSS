@@ -1,0 +1,27 @@
+# FreshRSS deployment for Portainer (nj106 fork).
+# - bridge network mode (no dedicated project network)
+# - host port 8081 -> container 80
+# - volume name pinned to freshrss_data via `name:` (no compose project prefix)
+# - extra_hosts maps the hostname `rsshub` to the host gateway, so FreshRSS
+#   can reach RSSHub at http://rsshub:1200. The default bridge network has no
+#   container-name DNS; traffic goes freshrss -> host:1200 -> rsshub container
+#   via the published port. Existing http://rsshub:1200 subscriptions keep working.
+services:
+  freshrss:
+    image: freshrss/freshrss:latest
+    container_name: freshrss
+    network_mode: bridge
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - freshrss-data:/var/www/FreshRSS/data
+    environment:
+      TZ: "Asia/Shanghai"
+    extra_hosts:
+      - "rsshub:host-gateway"
+
+volumes:
+  freshrss-data:
+    driver: local
+    name: freshrss_data
