@@ -24,6 +24,7 @@ services:
     environment:
       TZ: "Asia/Shanghai"
       INTERNAL_HOST_ALLOWLIST: "rsshub:1200"
+      CRON_MIN: "*/30"  # container-native auto-update every 30 min
     networks:
       - rsshub-net
 
