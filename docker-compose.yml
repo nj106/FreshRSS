@@ -10,6 +10,11 @@
 #   that refuses to fetch URLs resolving to private IPs ("URL is not allowed to
 #   be resolved"). This allowlist permits exactly rsshub:1200; everything else
 #   stays protected.
+# - command override: patches the Fever API to return item ids as integers
+#   before starting Apache. FreshRSS returns them as strings, which ReadKit's
+#   Fever client cannot decode ("Response could not be decoded"). Idempotent;
+#   a no-op if upstream changes that line. Otherwise identical to the image CMD
+#   (OIDC switch dropped, not used here).
 services:
   freshrss:
     image: freshrss/freshrss:latest
@@ -36,6 +41,14 @@ services:
       TZ: "Asia/Shanghai"
       INTERNAL_HOST_ALLOWLIST: "rsshub:1200"
       CRON_MIN: "*/30"  # container-native auto-update every 30 min
+    command:
+      - /bin/bash
+      - -o
+      - pipefail
+      - -c
+      - >-
+        sed -i "s/'id' => \\(.entry->id()\\),/'id' => (int)\\1,/" /var/www/FreshRSS/p/api/fever.php;
+        ([ -z "$$CRON_MIN" ] || cron) && . /etc/apache2/envvars && exec apache2 -D FOREGROUND
     networks:
       - rsshub-net
 
