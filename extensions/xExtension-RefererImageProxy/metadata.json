@@ -1,8 +1,0 @@
-{
-	"name": "RefererImageProxy",
-	"author": "nj106",
-	"description": "Serve images from hotlink-protected hosts through the local /imgp/ Referer proxy (freshrss-imgproxy).",
-	"version": "0.1",
-	"entrypoint": "RefererImageProxy",
-	"type": "system"
-}
