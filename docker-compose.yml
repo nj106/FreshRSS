@@ -97,10 +97,12 @@ services:
         map $$img_rest $$img_host { ~^https?/([A-Za-z0-9.:-]+) $$1; default ""; }
         map $$img_rest $$img_name { ~^https?/([A-Za-z0-9.-]+) $$1; default ""; }
         map $$img_rest $$img_path { ~^https?/[A-Za-z0-9.:-]+(/.*)$$ $$1; default "/"; }
+        log_format imgc '$$time_iso8601 $$upstream_cache_status $$status $$body_bytes_sent $$request_time ray=$$http_cf_ray cc=$$http_cf_ipcountry "$$http_user_agent" $$img_rest';
         server {
           listen 80;
           location = /healthz { access_log off; return 200 "ok"; }
           location /imgc/ {
+            access_log /dev/stdout imgc;
             secure_link $$img_sig;
             secure_link_md5 "$$img_rest ${IMGCACHE_SECRET}";
             if ($$secure_link = "") { return 403; }
