@@ -37,6 +37,7 @@ services:
       - "8081:80"
     volumes:
       - freshrss-data:/var/www/FreshRSS/data
+      - freshrss-extensions:/var/www/FreshRSS/extensions
     environment:
       TZ: "Asia/Shanghai"
       INTERNAL_HOST_ALLOWLIST: "rsshub:1200"
@@ -56,6 +57,9 @@ volumes:
   freshrss-data:
     driver: local
     name: freshrss_data
+  freshrss-extensions:
+    driver: local
+    name: freshrss_extensions
 
 networks:
   rsshub-net:
