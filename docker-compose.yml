@@ -39,9 +39,9 @@ services:
       - freshrss-data:/var/www/FreshRSS/data
       - freshrss-extensions:/var/www/FreshRSS/extensions
     environment:
-      TZ: "Asia/Shanghai"
-      INTERNAL_HOST_ALLOWLIST: "rsshub:1200"
-      CRON_MIN: "*/30"  # container-native auto-update every 30 min
+      TZ: "${TZ}"
+      INTERNAL_HOST_ALLOWLIST: "${INTERNAL_HOST_ALLOWLIST}"
+      CRON_MIN: "${CRON_MIN}"  # container-native auto-update every 30 min
     command:
       - /bin/bash
       - -o
